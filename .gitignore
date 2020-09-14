@@ -1,0 +1,4 @@
+minecli.egg-info
+poetry.lock
+dist
+.vscode
