@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-python@v2
       - run: |
           pip install --user poetry
-          python -m poetry install
+          python -m poetry install --no-dev --no-root -E pyinstaller
           python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
           mv dist/minecli dist/minecli-linux
       - uses: ncipollo/release-action@v1
@@ -28,7 +28,7 @@ jobs:
       - uses: actions/setup-python@v2
       - run: |
           pip install --user poetry
-          python -m poetry install
+          python -m poetry install --no-dev --no-root -E pyinstaller
           python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
           Rename-Item -Path "dist\minecli.exe" -NewName "minecli-windows.exe"
       - uses: ncipollo/release-action@v1
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-python@v2
       - run: |
           pip install --user poetry
-          python -m poetry install
+          python -m poetry install --no-dev --no-root -E pyinstaller
           python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
           mv dist/minecli dist/minecli-macos
       - uses: ncipollo/release-action@v1
