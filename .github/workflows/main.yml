@@ -9,16 +9,23 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+        - os: ubuntu-latest
+          TARGET: linux
+        - os: windows-latest
+          TARGET: windows
+        - os: macos-latest
+          TARGET: macos
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
       - run: |
           pip install --user poetry
           python -m poetry install --no-dev --no-root -E pyinstaller
-          python -m poetry run python -OO -m PyInstaller --onefile -n "minecli-${{ matrix.os }}" minecli/minecli.py
+          python -m poetry run python -OO -m PyInstaller --onefile -n "minecli-${{ matrix.TARGET }}" minecli/minecli.py
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
           prerelease: true
-          artifacts: "./dist/minecli-${{ matrix.os }}*"
+          artifacts: "./dist/minecli-${{ matrix.TARGET }}*"
           token: ${{ secrets.GITHUB_TOKEN }}
