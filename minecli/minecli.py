@@ -14,16 +14,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import os
-from pathlib import Path
+import importlib
+from os import path
+import pathlib
 import click
 import appdirs
-from minelib.server import vanilla, spigot, paper
 
 
 @click.group()
 def cli():
     pass
+
 
 @cli.group()
 def server():
@@ -38,19 +39,15 @@ def server():
 def create(name, servertype):
     """Create a server"""
     basedir = appdirs.user_data_dir(appname="mclib", appauthor=False, roaming=True)
-    serverdir = os.path.join(basedir, name)
-    Path(serverdir).mkdir(parents=True, exist_ok=True)
+    serverdir = path.join(basedir, name)
+    pathlib.Path(serverdir).mkdir(parents=True, exist_ok=True)
 
-    if servertype == "vanilla":
-        server = vanilla.MinecraftServer()
-    elif servertype == "spigot":
-        server = spigot.SpigotServer()
-    elif servertype == "paper":
-        server = paper.PaperServer()
-
-    server.download(serverdir)  # download latest version
+    server_module = importlib.import_module(f"minelib.server.{servertype}")
+    server = server_module.MinecraftServer(serverdir)
+    server.download()
 
     print(f"{name} created at {serverdir}")
+
 
 if __name__ == "__main__":
     cli()

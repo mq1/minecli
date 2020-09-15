@@ -1,14 +1,14 @@
 [tool.poetry]
 name = "minecli"
-version = "0.1.1"
+version = "0.1.2"
 description = "Unofficial Minecraft cli utils"
 authors = ["Manuel Quarneti <manuelquarneti@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
+minelib = "0.1.8"
 click = "^7.1.2"
 appdirs = "^1.4.4"
-minelib = "^0.1.5"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
