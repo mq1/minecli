@@ -4,29 +4,7 @@ on:
     - '*'
 
 jobs:
-  release:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1.0.0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
-    - name: Output Release URL File
-      run: echo "${{ steps.create_release.outputs.upload_url }}" > release_url.txt
-    - name: Save Release URL File for publish
-      uses: actions/upload-artifact@v1
-      with:
-        name: release_url
-        path: release_url.txt
-
   build-linux:
-    needs: [release]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -40,27 +18,15 @@ jobs:
           pip install --user poetry
           python -m poetry install
           python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
-      - name: Get Release File Name & Upload URL
-        id: get_release_info
-        run: |
-          value=`cat release_url/release_url.txt`
-          echo ::set-output name=upload_url::$value
-        env:
-          TAG_REF_NAME: ${{ github.ref }}
-          REPOSITORY_NAME: ${{ github.repository }}
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          mv dist/minecli dist/minecli-linux
+      - uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-          asset_path: ./dist/minecli
-          asset_name: minecli-linux
-          asset_content_type: application/octet-stream
+          allowUpdates: true
+          prerelease: true
+          artifact: ./dist/minecli-linux
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-windows:
-    needs: [release]
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
@@ -74,27 +40,14 @@ jobs:
           pip install --user poetry
           python -m poetry install
           python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
-      - name: Get Release File Name & Upload URL
-        id: get_release_info
-        run: |
-          value=`cat release_url/release_url.txt`
-          echo ::set-output name=upload_url::$value
-        env:
-          TAG_REF_NAME: ${{ github.ref }}
-          REPOSITORY_NAME: ${{ github.repository }}
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-          asset_path: ./dist/minecli.exe
-          asset_name: minecli-windows.exe
-          asset_content_type: application/vnd.microsoft.portable-executable
+          allowUpdates: true
+          prerelease: true
+          artifact: ./dist/minecli.exe
+          token: ${{ secrets.GITHUB_TOKEN }}
 
   build-macos:
-    needs: [release]
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
@@ -108,21 +61,10 @@ jobs:
           pip install --user poetry
           python -m poetry install
           python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
-      - name: Get Release File Name & Upload URL
-        id: get_release_info
-        run: |
-          value=`cat release_url/release_url.txt`
-          echo ::set-output name=upload_url::$value
-        env:
-          TAG_REF_NAME: ${{ github.ref }}
-          REPOSITORY_NAME: ${{ github.repository }}
-      - name: Upload Release Asset
-        id: upload-release-asset 
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          mv dist/minecli dist/minecli-macos
+      - uses: ncipollo/release-action@v1
         with:
-          upload_url: ${{ steps.get_release_info.outputs.upload_url }}
-          asset_path: ./dist/minecli
-          asset_name: minecli-macos
-          asset_content_type: application/octet-stream
+          allowUpdates: true
+          prerelease: true
+          artifact: ./dist/minecli-macos
+          token: ${{ secrets.GITHUB_TOKEN }}
