@@ -18,7 +18,7 @@ jobs:
         with:
           allowUpdates: true
           prerelease: true
-          artifact: ./dist/minecli-linux
+          artifacts: ./dist/minecli-linux
           token: ${{ secrets.GITHUB_TOKEN }}
 
   build-windows:
@@ -34,7 +34,7 @@ jobs:
         with:
           allowUpdates: true
           prerelease: true
-          artifact: ./dist/minecli.exe
+          artifacts: ./dist/minecli.exe
           token: ${{ secrets.GITHUB_TOKEN }}
 
   build-macos:
@@ -51,5 +51,5 @@ jobs:
         with:
           allowUpdates: true
           prerelease: true
-          artifact: ./dist/minecli-macos
+          artifacts: ./dist/minecli-macos
           token: ${{ secrets.GITHUB_TOKEN }}
