@@ -20,5 +20,5 @@ jobs:
         with:
           allowUpdates: true
           prerelease: true
-          artifacts: ./dist/minecli-${{ matrix.os }}*
+          artifacts: "./dist/minecli-${{ matrix.os }}*"
           token: ${{ secrets.GITHUB_TOKEN }}
