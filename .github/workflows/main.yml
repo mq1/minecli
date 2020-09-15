@@ -30,13 +30,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Load Release URL File from release job
+        uses: actions/download-artifact@v1
+        with:
+          name: release_url
       - name: Set up Python
         uses: actions/setup-python@v2
       - run: |
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
-          export PATH="$PATH:$HOME/.poetry/bin"
-          poetry install
-          poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
+          pip install --user poetry
+          python -m poetry install
+          python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
       - name: Get Release File Name & Upload URL
         id: get_release_info
         run: |
@@ -61,12 +64,16 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Load Release URL File from release job
+        uses: actions/download-artifact@v1
+        with:
+          name: release_url
       - name: Set up Python
         uses: actions/setup-python@v2
       - run: |
-          (Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py -UseBasicParsing).Content | python
-          .poetry\bin\poetry.exe install
-          .poetry\bin\poetry.exe run python -OO -m PyInstaller --onefile minecli/minecli.py
+          pip install --user poetry
+          python -m poetry install
+          python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
       - name: Get Release File Name & Upload URL
         id: get_release_info
         run: |
@@ -91,13 +98,16 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Load Release URL File from release job
+        uses: actions/download-artifact@v1
+        with:
+          name: release_url
       - name: Set up Python
         uses: actions/setup-python@v2
       - run: |
-          curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python
-          export PATH="$PATH:$HOME/.poetry/bin"
-          poetry install
-          poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
+          pip install --user poetry
+          python -m poetry install
+          python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
       - name: Get Release File Name & Upload URL
         id: get_release_info
         run: |
