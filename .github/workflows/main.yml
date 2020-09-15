@@ -12,8 +12,7 @@ jobs:
       - run: |
           pip install --user poetry
           python -m poetry install --no-dev --no-root -E pyinstaller
-          python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
-          mv dist/minecli dist/minecli-linux
+          python -m poetry run python -OO -m PyInstaller --onefile -n "minecli-linux" minecli/minecli.py
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -29,8 +28,7 @@ jobs:
       - run: |
           pip install --user poetry
           python -m poetry install --no-dev --no-root -E pyinstaller
-          python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
-          Rename-Item -Path "dist\minecli.exe" -NewName "minecli-windows.exe"
+          python -m poetry run python -OO -m PyInstaller --onefile -n "minecli-windows" minecli/minecli.py
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
@@ -46,8 +44,7 @@ jobs:
       - run: |
           pip install --user poetry
           python -m poetry install --no-dev --no-root -E pyinstaller
-          python -m poetry run python -OO -m PyInstaller --onefile minecli/minecli.py
-          mv dist/minecli dist/minecli-macos
+          python -m poetry run python -OO -m PyInstaller --onefile -n "minecli-macos" minecli/minecli.py
       - uses: ncipollo/release-action@v1
         with:
           allowUpdates: true
